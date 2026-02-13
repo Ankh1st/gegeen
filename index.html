@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You 🖤</title>
+
+<style>
+body {
+  margin:0;
+  height:100vh;
+  overflow:hidden;
+  font-family: Arial, sans-serif;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  /* Эхний зураг */
+  background:url('first.png') no-repeat center center/cover;
+  background-size: cover;
+  transition: background 1.5s ease; /* YES дарахад fade effect */
+}
+
+.overlay {
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.65);
+  top:0;
+  left:0;
+}
+
+.page {
+  position:relative;
+  z-index:2;
+  animation:fadeIn 2s ease;
+}
+
+h1 { font-size:42px; margin-bottom:20px; }
+h2 { margin-bottom:30px; }
+
+button {
+  padding:12px 30px;
+  font-size:18px;
+  margin:10px;
+  border:none;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.yes {
+  background:#8b0000;
+  color:white;
+}
+
+.no {
+  background:white;
+  color:black;
+  position:absolute;
+}
+
+button:hover { transform:scale(1.1); }
+
+@keyframes fadeIn {
+  from {opacity:0; transform:translateY(20px);}
+  to {opacity:1; transform:translateY(0);}
+}
+
+#promptClick {
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: rgba(0,0,0,0.8);
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:28px;
+  z-index:9999;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay"></div>
+
+<!-- 🎵 BACKGROUND MUSIC -->
+<audio id="bgMusic" loop>
+  <source src="gegeen.mp3" type="audio/mpeg">
+</audio>
+
+<!-- PAGE 1 -->
+<div class="page" id="page1">
+  <h1>Дараа насандаа биш...</h1>
+  <h2>Энэ насандаа хамт байцгаая.</h2>
+  <p>Will you be mine?</p>
+  <button class="yes" id="yesBtn">YES</button>
+  <button class="no" id="noBtn">NO</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="page2" style="display:none;">
+  <h1>Чи намайг сонгосон 🖤</h1>
+  <h2>Одоо чи миний энэ насны Valentine.</h2>
+</div>
+
+<!-- Prompt div for blocked autoplay -->
+<div id="promptClick" style="display:none;">Click anywhere to start music 🎵</div>
+
+<script>
+const music = document.getElementById("bgMusic");
+const promptDiv = document.getElementById("promptClick");
+const yesBtn = document.getElementById("yesBtn");
+
+// Шууд page load дээр дуу play оролдлого
+window.addEventListener("load", async () => {
+  try {
+    await music.play();
+    console.log("Audio started successfully");
+  } catch(err) {
+    console.log("Autoplay blocked:", err);
+    // Browser block хийвэл хэрэглэгч click хийхэд ажиллуулах prompt
+    promptDiv.style.display = "flex";
+    promptDiv.addEventListener("click", () => {
+      music.play();
+      promptDiv.style.display = "none";
+    });
+  }
+});
+
+function nextPage() {
+  document.getElementById("page1").style.display="none";
+  document.getElementById("page2").style.display="block";
+
+  // YES дарахад арын зураг second.jpeg болгох
+  document.body.style.background = "url('second.jpeg') no-repeat center center/cover";
+}
+
+// YES товч дээр event
+yesBtn.addEventListener("click", nextPage);
+
+// NO товч хөдөлгөөн
+const noBtn = document.getElementById("noBtn");
+noBtn.addEventListener("mouseover", function() {
+  noBtn.style.top = Math.random()*(window.innerHeight - noBtn.offsetHeight) + "px";
+  noBtn.style.left = Math.random()*(window.innerWidth - noBtn.offsetWidth) + "px";
+});
+</script>
+
+</body>
+</html>
